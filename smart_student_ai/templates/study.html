@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Study Setup - MentoraMind</title>
+	<script>
+		if (localStorage.getItem("mm_logged_in") !== "true") {
+			window.location.href = "/login";
+		}
+	</script>
+	<link rel="stylesheet" href="/static/css/style.css">
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+	<div class="background-animation"></div>
+	<div class="floating-shapes">
+		<div class="shape shape-1"></div>
+		<div class="shape shape-2"></div>
+	</div>
+
+	<div class="page-container">
+		<!-- User Menu -->
+		<div class="user-menu">
+			<button class="user-btn" onclick="toggleUserMenu()" title="User Menu">
+				<i class="fas fa-user-circle"></i>
+				<span id="user-name">User</span>
+			</button>
+			<div class="user-dropdown" id="userDropdown">
+				<div class="dropdown-user-info">
+					<i class="fas fa-user-circle"></i>
+					<span id="dropdown-user-name">User</span>
+				</div>
+				<hr>
+				<a href="/logout" class="dropdown-item logout">
+					<i class="fas fa-sign-out-alt"></i> Logout
+				</a>
+			</div>
+		</div>
+
+		<!-- Styles for User Menu -->
+		<style>
+			.user-menu {
+				position: fixed;
+				top: 20px;
+				right: 20px;
+				z-index: 1000;
+			}
+
+			.user-btn {
+				background: white;
+				border: 2px solid #6366f1;
+				color: #6366f1;
+				padding: 10px 15px;
+				border-radius: 50px;
+				cursor: pointer;
+				font-size: 14px;
+				font-weight: 600;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				transition: all 0.3s ease;
+				box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+			}
+
+			.user-btn:hover {
+				background: #6366f1;
+				color: white;
+				transform: translateY(-2px);
+			}
+
+			.user-btn i {
+				font-size: 18px;
+			}
+
+			.user-dropdown {
+				position: absolute;
+				top: 50px;
+				right: 0;
+				background: white;
+				border-radius: 10px;
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+				min-width: 200px;
+				display: none;
+				z-index: 1001;
+				animation: slideDown 0.3s ease;
+			}
+
+			.user-dropdown.show {
+				display: block;
+			}
+
+			@keyframes slideDown {
+				from {
+					opacity: 0;
+					transform: translateY(-10px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			.dropdown-user-info {
+				padding: 15px;
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				color: #333;
+				font-weight: 600;
+			}
+
+			.dropdown-user-info i {
+				font-size: 24px;
+				color: #6366f1;
+			}
+
+			.user-dropdown hr {
+				margin: 0;
+				border: none;
+				border-top: 1px solid #e0e0e0;
+			}
+
+			.dropdown-item {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				padding: 12px 15px;
+				color: #333;
+				text-decoration: none;
+				transition: all 0.2s ease;
+			}
+
+			.dropdown-item:hover {
+				background: #f5f5f5;
+				color: #6366f1;
+			}
+
+			.dropdown-item.logout {
+				color: #ef4444;
+			}
+
+			.dropdown-item.logout:hover {
+				background: #fee;
+				color: #c33;
+			}
+
+			.dropdown-item i {
+				font-size: 16px;
+			}
+
+			@media (max-width: 600px) {
+				.user-menu {
+					top: 10px;
+					right: 10px;
+				}
+
+				.user-btn {
+					padding: 8px 12px;
+					font-size: 12px;
+				}
+
+				.user-btn i {
+					font-size: 16px;
+				}
+			}
+		</style>
+
+		<script>
+			// Get user info from session
+			document.addEventListener('DOMContentLoaded', function() {
+				fetch('/user_info')
+					.then(response => response.json())
+					.then(data => {
+						if (data.user_name) {
+							document.getElementById('user-name').textContent = data.user_name.split('@')[0] || data.user_name;
+							document.getElementById('dropdown-user-name').textContent = data.user_name;
+						}
+					})
+					.catch(error => console.error('Error fetching user info:', error));
+			});
+
+			function toggleUserMenu() {
+				const dropdown = document.getElementById('userDropdown');
+				dropdown.classList.toggle('show');
+
+				document.addEventListener('click', function(event) {
+					const userMenu = document.querySelector('.user-menu');
+					if (!userMenu.contains(event.target)) {
+						dropdown.classList.remove('show');
+					}
+				});
+			}
+		</script>
+
+		<div class="nav-buttons">
+			<a href="/home" class="back-button-floating" title="Back to Home">
+				<i class="fas fa-home"></i>
+			</a>
+			<a href="/career_page" class="nav-link-btn" title="Go to Career Path">
+				<i class="fas fa-briefcase"></i> Career Path
+			</a>
+			<a href="/chatbot_page" class="nav-link-btn" title="Go to AI Assistant">
+				<i class="fas fa-comments"></i> Chat
+			</a>
+		</div>
+
+		<div class="form-card">
+			<div class="card-header">
+				<div class="header-icon">📚</div>
+				<h2>Study Environment Optimizer</h2>
+				<p>Create the perfect study setup tailored to you</p>
+			</div>
+
+			<div class="form-content">
+				<div class="form-group">
+					<label class="form-label">🔊 Noise Preference</label>
+					<select id="noise" class="form-select">
+						<option value="silent">🤐 Silent - Complete Quiet</option>
+						<option value="music">🎵 Music - Instrumental Focus</option>
+						<option value="ambient">🌊 Ambient - Nature Sounds</option>
+						<option value="normal">🏢 Normal - Background Noise</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label class="form-label">⏱️ Focus Duration</label>
+					<select id="focus" class="form-select">
+						<option value="short">⚡ Short - 30-45 minutes</option>
+						<option value="medium">🎯 Medium - 60-75 minutes</option>
+						<option value="long">🏃 Long - 90+ minutes</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label class="form-label">📚 Subject Type</label>
+					<select id="subject" class="form-select">
+						<option value="creative">🎨 Creative - Writing, Design</option>
+						<option value="analytical">📊 Analytical - Math, Logic</option>
+						<option value="memorization">🧠 Memorization - Languages, History</option>
+						<option value="practical">🔧 Practical - Coding, Hands-on</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label class="form-label">💡 Lighting</label>
+					<select id="lighting" class="form-select">
+						<option value="natural">☀️ Natural Light</option>
+						<option value="warm">🕯️ Warm Light - Comfortable</option>
+						<option value="bright">💫 Bright Light - High Focus</option>
+						<option value="dim">🌙 Dim Light - Relaxed</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label class="form-label">🌡️ Temperature</label>
+					<select id="temperature" class="form-select">
+						<option value="cool">🧊 Cool - 16-18°C</option>
+						<option value="moderate">😊 Moderate - 19-22°C</option>
+						<option value="warm">🔥 Warm - 23-25°C</option>
+					</select>
+				</div>
+
+				<button class="btn-primary" onclick="getStudy()">Get Recommendations</button>
+
+				<div id="studyResult" class="result-container study-result"></div>
+			</div>
+		</div>
+	</div>
+
+	<a href="/home" class="back-button-floating" title="Back to Home">
+		<i class="fas fa-home"></i>
+	</a>
+
+	<script src="/static/js/script.js"></script>
+</body>
+</html>

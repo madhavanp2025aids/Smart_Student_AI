@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login - MentoraMind</title>
+	<link rel="stylesheet" href="/static/css/style.css">
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<style>
+		.login-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			min-height: 100vh;
+			padding: 20px;
+		}
+
+		.login-card {
+			background: rgba(255, 255, 255, 0.95);
+			border-radius: 20px;
+			padding: 50px 40px;
+			max-width: 450px;
+			width: 100%;
+			box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+			animation: slideIn 0.6s ease-out;
+		}
+
+		@keyframes slideIn {
+			from {
+				opacity: 0;
+				transform: translateY(-20px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		.login-header {
+			text-align: center;
+			margin-bottom: 40px;
+		}
+
+		.login-header h1 {
+			font-size: 32px;
+			color: #6366f1;
+			margin: 0;
+			font-weight: 700;
+			margin-bottom: 10px;
+		}
+
+		.login-header p {
+			color: #666;
+			font-size: 14px;
+			margin: 0;
+		}
+
+		.form-group {
+			margin-bottom: 20px;
+		}
+
+		.form-group label {
+			display: block;
+			margin-bottom: 8px;
+			color: #333;
+			font-weight: 500;
+			font-size: 14px;
+		}
+
+		.form-group input {
+			width: 100%;
+			padding: 12px 15px;
+			border: 2px solid #e0e0e0;
+			border-radius: 10px;
+			font-size: 14px;
+			font-family: 'Roboto', sans-serif;
+			transition: all 0.3s ease;
+			box-sizing: border-box;
+		}
+
+		.form-group input:focus {
+			outline: none;
+			border-color: #6366f1;
+			box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+		}
+
+		.form-group input::placeholder {
+			color: #999;
+		}
+
+		.error-message {
+			background: #fee;
+			color: #c33;
+			padding: 12px 15px;
+			border-radius: 10px;
+			margin-bottom: 20px;
+			font-size: 14px;
+			border-left: 4px solid #c33;
+			animation: shake 0.5s ease;
+		}
+
+		@keyframes shake {
+			0%, 100% { transform: translateX(0); }
+			25% { transform: translateX(-5px); }
+			75% { transform: translateX(5px); }
+		}
+
+		.success-message {
+			background: #efe;
+			color: #3c3;
+			padding: 12px 15px;
+			border-radius: 10px;
+			margin-bottom: 20px;
+			font-size: 14px;
+			border-left: 4px solid #3c3;
+		}
+
+		.btn-submit {
+			width: 100%;
+			padding: 12px;
+			background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+			color: white;
+			border: none;
+			border-radius: 10px;
+			font-size: 15px;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			margin-bottom: 15px;
+		}
+
+		.btn-submit:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+		}
+
+		.btn-submit:active {
+			transform: translateY(0);
+		}
+
+		.toggle-section {
+			text-align: center;
+			margin-top: 20px;
+		}
+
+		.toggle-text {
+			color: #666;
+			font-size: 14px;
+		}
+
+		.toggle-btn {
+			background: none;
+			border: none;
+			color: #6366f1;
+			cursor: pointer;
+			font-weight: 600;
+			text-decoration: underline;
+			font-size: 14px;
+			padding: 0;
+			margin-left: 5px;
+		}
+
+		.toggle-btn:hover {
+			color: #8b5cf6;
+		}
+
+		.form-section {
+			display: none;
+		}
+
+		.form-section.active {
+			display: block;
+			animation: fadeIn 0.3s ease;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+			}
+			to {
+				opacity: 1;
+			}
+		}
+
+		.demo-notice {
+			background: #f0f7ff;
+			border-left: 4px solid #2563eb;
+			padding: 15px;
+			border-radius: 8px;
+			margin-bottom: 20px;
+			font-size: 13px;
+			color: #1e40af;
+		}
+
+		.demo-notice strong {
+			display: block;
+			margin-bottom: 5px;
+		}
+
+		.icon-circle {
+			width: 60px;
+			height: 60px;
+			background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 30px;
+			margin: 0 auto 20px;
+		}
+
+		.password-strength {
+			margin-top: 8px;
+			height: 4px;
+			background: #e0e0e0;
+			border-radius: 2px;
+			overflow: hidden;
+		}
+
+		.password-strength-bar {
+			height: 100%;
+			width: 0%;
+			background: #ddd;
+			border-radius: 2px;
+			transition: all 0.3s ease;
+		}
+
+		.password-strength-bar.weak {
+			width: 33%;
+			background: #ef4444;
+		}
+
+		.password-strength-bar.medium {
+			width: 66%;
+			background: #f59e0b;
+		}
+
+		.password-strength-bar.strong {
+			width: 100%;
+			background: #10b981;
+		}
+
+		@media (max-width: 600px) {
+			.login-card {
+				padding: 30px 20px;
+			}
+
+			.login-header h1 {
+				font-size: 26px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="background-animation"></div>
+	<div class="floating-shapes">
+		<div class="shape shape-1"></div>
+		<div class="shape shape-2"></div>
+		<div class="shape shape-3"></div>
+		<div class="shape shape-4"></div>
+	</div>
+
+	<div class="login-container">
+		<div class="login-card">
+			<!-- Logo and Header -->
+			<div class="login-header">
+				<div class="icon-circle">🎓</div>
+				<h1>MentoraMind</h1>
+				<p id="header-subtitle">Welcome Back!</p>
+			</div>
+
+			<!-- Demo Notice -->
+			<div class="demo-notice">
+				<strong>📝 Demo Account:</strong>
+				Email: <code>demo@example.com</code><br>
+				Password: <code>demo123</code>
+			</div>
+
+			<!-- Login/Register Form -->
+			<form id="authForm" method="POST" action="/login">
+				<!-- Error Message (if any) -->
+				{% if error %}
+					<div class="error-message">{{ error }}</div>
+				{% endif %}
+
+				<!-- Login Section -->
+				<div class="form-section login-section active">
+					<div class="form-group">
+						<label for="login-email">📧 Email</label>
+						<input type="email" id="login-email" name="email" placeholder="your.email@example.com" required>
+					</div>
+
+					<div class="form-group">
+						<label for="login-password">🔐 Password</label>
+						<input type="password" id="login-password" name="password" placeholder="Enter your password" required>
+					</div>
+
+					<button type="submit" class="btn-submit">
+						<i class="fas fa-sign-in-alt"></i> Login
+					</button>
+
+					<div class="toggle-section">
+						<span class="toggle-text">Don't have an account?</span>
+						<button type="button" class="toggle-btn" onclick="toggleForm(event)">Register</button>
+					</div>
+				</div>
+
+				<!-- Register Section -->
+				<div class="form-section register-section">
+					<div class="form-group">
+						<label for="register-email">📧 Email</label>
+						<input type="email" id="register-email" name="email" placeholder="your.email@example.com">
+					</div>
+
+					<div class="form-group">
+						<label for="register-password">🔐 Password</label>
+						<input type="password" id="register-password" name="password" placeholder="At least 6 characters" onkeyup="checkPasswordStrength(this.value)">
+						<div class="password-strength">
+							<div class="password-strength-bar" id="strength-bar"></div>
+						</div>
+					</div>
+
+					<input type="hidden" name="is_register" value="true">
+
+					<button type="submit" class="btn-submit">
+						<i class="fas fa-user-plus"></i> Create Account
+					</button>
+
+					<div class="toggle-section">
+						<span class="toggle-text">Already have an account?</span>
+						<button type="button" class="toggle-btn" onclick="toggleForm(event)">Login</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script>
+		function toggleForm(event) {
+			event.preventDefault();
+			
+			const loginSection = document.querySelector('.login-section');
+			const registerSection = document.querySelector('.register-section');
+			const headerSubtitle = document.getElementById('header-subtitle');
+			
+			loginSection.classList.toggle('active');
+			registerSection.classList.toggle('active');
+			
+			const loginEmail = document.getElementById('login-email');
+			const loginPass = document.getElementById('login-password');
+			const registerEmail = document.getElementById('register-email');
+			const registerPass = document.getElementById('register-password');
+			
+			// Update header & toggle required fields to avoid hidden required validation error
+			if (registerSection.classList.contains('active')) {
+				headerSubtitle.textContent = 'Create Your Account';
+				document.getElementById('authForm').reset();
+				loginEmail.removeAttribute('required');
+				loginPass.removeAttribute('required');
+				registerEmail.setAttribute('required', '');
+				registerPass.setAttribute('required', '');
+			} else {
+				headerSubtitle.textContent = 'Welcome Back!';
+				document.getElementById('authForm').reset();
+				loginEmail.setAttribute('required', '');
+				loginPass.setAttribute('required', '');
+				registerEmail.removeAttribute('required');
+				registerPass.removeAttribute('required');
+			}
+		}
+
+		function checkPasswordStrength(password) {
+			const strengthBar = document.getElementById('strength-bar');
+			
+			if (password.length === 0) {
+				strengthBar.className = 'password-strength-bar';
+				return;
+			}
+
+			let strength = 0;
+			
+			// Check length
+			if (password.length >= 6) strength++;
+			if (password.length >= 8) strength++;
+			if (password.length >= 12) strength++;
+			
+			// Check for numbers
+			if (/[0-9]/.test(password)) strength++;
+			
+			// Check for lowercase
+			if (/[a-z]/.test(password)) strength++;
+			
+			// Check for uppercase
+			if (/[A-Z]/.test(password)) strength++;
+			
+			// Check for special characters
+			if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+			strengthBar.className = 'password-strength-bar';
+			
+			if (strength <= 2) {
+				strengthBar.classList.add('weak');
+			} else if (strength <= 4) {
+				strengthBar.classList.add('medium');
+			} else {
+				strengthBar.classList.add('strong');
+			}
+		}
+
+		// Handle form submission
+		document.getElementById('authForm').addEventListener('submit', function(e) {
+			const registerSection = document.querySelector('.register-section');
+			
+			if (registerSection.classList.contains('active')) {
+				// Registration validation
+				const email = document.getElementById('register-email').value.trim();
+				const password = document.getElementById('register-password').value;
+				
+				if (email === '') {
+					e.preventDefault();
+					alert('Please enter your email');
+					return;
+				}
+				
+				if (password.length < 6) {
+					e.preventDefault();
+					alert('Password must be at least 6 characters');
+					return;
+				}
+			} else {
+				// Login validation
+				const email = document.getElementById('login-email').value.trim();
+				const password = document.getElementById('login-password').value;
+				
+				if (email === '') {
+					e.preventDefault();
+					alert('Please enter your email');
+					return;
+				}
+				
+				if (password === '') {
+					e.preventDefault();
+					alert('Please enter your password');
+					return;
+				}
+			}
+			// If validation passes, form will submit normally
+		});
+	</script>
+</body>
+</html>

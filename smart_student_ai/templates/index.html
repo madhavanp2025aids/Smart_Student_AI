@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>MentoraMind - AI Learning Guide</title>
+	<script>
+		if (localStorage.getItem("mm_logged_in") !== "true") {
+			window.location.href = "/login";
+		}
+	</script>
+	<link rel="stylesheet" href="/static/css/style.css">
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+	<div class="background-animation"></div>
+	<div class="floating-shapes">
+		<div class="shape shape-1"></div>
+		<div class="shape shape-2"></div>
+		<div class="shape shape-3"></div>
+		<div class="shape shape-4"></div>
+	</div>
+
+	<div class="animated-objects">
+		<div class="floating-object obj-book">📚</div>
+		<div class="floating-object obj-lightbulb">💡</div>
+		<div class="floating-object obj-brain">🧠</div>
+		<div class="floating-object obj-rocket">🚀</div>
+		<div class="floating-object obj-star">⭐</div>
+		<div class="floating-object obj-target">🎓</div>
+		<div class="floating-object obj-lightning">⚡</div>
+	</div>
+
+	<!-- User Menu (top-right corner) -->
+	<div class="user-menu" id="userMenuContainer">
+		<button class="user-btn" onclick="toggleUserMenu()" title="User Menu" id="userBtn">
+			<span class="user-avatar" id="userAvatar">U</span>
+			<span id="user-name">User</span>
+			<i class="fas fa-chevron-down user-caret" id="userCaret"></i>
+		</button>
+		<div class="user-dropdown" id="userDropdown">
+			<div class="dropdown-user-info">
+				<span class="dropdown-avatar" id="dropdownAvatar">U</span>
+				<div class="dropdown-user-details">
+					<span class="dropdown-user-name" id="dropdown-user-name">User</span>
+					<span class="dropdown-user-email" id="dropdown-user-email"></span>
+				</div>
+			</div>
+			<hr>
+			<a href="/login" class="dropdown-item">
+				<i class="fas fa-sign-in-alt"></i> Switch Account
+			</a>
+			<a href="#" class="dropdown-item logout" onclick="handleLogout(event)">
+				<i class="fas fa-sign-out-alt"></i> Logout
+			</a>
+		</div>
+	</div>
+
+	<!-- Styles for User Menu -->
+	<style>
+		.user-menu {
+			position: fixed;
+			top: 18px;
+			right: 20px;
+			z-index: 1000;
+		}
+
+		/* ── Pill button ── */
+		.user-btn {
+			background: rgba(18, 25, 48, 0.92);
+			border: 1.5px solid rgba(100, 180, 255, 0.35);
+			color: #e0eeff;
+			padding: 8px 14px 8px 8px;
+			border-radius: 50px;
+			cursor: pointer;
+			font-size: 14px;
+			font-weight: 600;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(100,180,255,0.2);
+			backdrop-filter: blur(12px);
+			max-width: 220px;
+			overflow: hidden;
+		}
+
+		.user-btn:hover {
+			background: rgba(30, 45, 80, 0.98);
+			border-color: rgba(100, 180, 255, 0.65);
+			box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35), 0 0 0 3px rgba(100,180,255,0.12);
+			transform: translateY(-1px);
+		}
+
+		/* Avatar circle */
+		.user-avatar {
+			width: 30px;
+			height: 30px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, #1a6fbf, #3a9eff);
+			color: white;
+			font-size: 13px;
+			font-weight: 700;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+			text-transform: uppercase;
+			box-shadow: 0 2px 8px rgba(42,143,239,0.45);
+			letter-spacing: 0;
+		}
+
+		#user-name {
+			max-width: 130px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			font-family: 'Inter', 'Roboto', sans-serif;
+			letter-spacing: 0.1px;
+		}
+
+		.user-caret {
+			font-size: 10px;
+			color: rgba(150,190,255,0.7);
+			transition: transform 0.25s ease;
+			flex-shrink: 0;
+		}
+
+		.user-caret.open {
+			transform: rotate(180deg);
+		}
+
+		/* ── Dropdown ── */
+		.user-dropdown {
+			position: absolute;
+			top: calc(100% + 10px);
+			right: 0;
+			background: rgba(16, 22, 40, 0.97);
+			border: 1px solid rgba(100, 180, 255, 0.2);
+			border-radius: 14px;
+			box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.04);
+			min-width: 240px;
+			display: none;
+			z-index: 1001;
+			overflow: hidden;
+			backdrop-filter: blur(20px);
+		}
+
+		.user-dropdown.show {
+			display: block;
+			animation: dropdownSlide 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+		}
+
+		@keyframes dropdownSlide {
+			from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+			to   { opacity: 1; transform: translateY(0)  scale(1); }
+		}
+
+		/* Dropdown user info section */
+		.dropdown-user-info {
+			padding: 16px;
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			background: rgba(26, 111, 191, 0.08);
+		}
+
+		.dropdown-avatar {
+			width: 42px;
+			height: 42px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, #1a6fbf, #3a9eff);
+			color: white;
+			font-size: 17px;
+			font-weight: 700;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+			text-transform: uppercase;
+			box-shadow: 0 4px 12px rgba(42,143,239,0.4);
+		}
+
+		.dropdown-user-details {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			min-width: 0;
+		}
+
+		.dropdown-user-name {
+			font-size: 0.95rem;
+			font-weight: 700;
+			color: #e8f0ff;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.dropdown-user-email {
+			font-size: 0.75rem;
+			color: rgba(140, 170, 220, 0.65);
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.user-dropdown hr {
+			margin: 0;
+			border: none;
+			border-top: 1px solid rgba(100, 180, 255, 0.1);
+		}
+
+		.dropdown-item {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			padding: 12px 16px;
+			color: rgba(200, 220, 255, 0.85);
+			text-decoration: none;
+			transition: all 0.2s ease;
+			font-size: 0.9rem;
+			font-weight: 500;
+		}
+
+		.dropdown-item:hover {
+			background: rgba(100, 180, 255, 0.1);
+			color: #e0f0ff;
+			padding-left: 20px;
+		}
+
+		.dropdown-item i {
+			width: 16px;
+			text-align: center;
+			color: rgba(100, 180, 255, 0.7);
+			font-size: 14px;
+		}
+
+		.dropdown-item.logout {
+			color: rgba(252, 165, 165, 0.85);
+		}
+
+		.dropdown-item.logout i {
+			color: rgba(252, 100, 100, 0.7);
+		}
+
+		.dropdown-item.logout:hover {
+			background: rgba(239, 68, 68, 0.1);
+			color: #fca5a5;
+		}
+
+		@media (max-width: 600px) {
+			.user-menu { top: 12px; right: 12px; }
+			.user-btn  { padding: 7px 12px 7px 7px; font-size: 13px; }
+			.user-avatar { width: 26px; height: 26px; font-size: 11px; }
+			#user-name { max-width: 90px; }
+		}
+	</style>
+
+	<script>
+		// ── Read user info from localStorage (set during login) ──
+		document.addEventListener('DOMContentLoaded', function () {
+			const name  = localStorage.getItem('mm_user_name')  || 'Guest';
+			const email = localStorage.getItem('mm_user_email') || '';
+
+			// Derive initials (up to 2 chars) from the name
+			const initials = name
+				.split(' ')
+				.filter(Boolean)
+				.slice(0, 2)
+				.map(w => w[0].toUpperCase())
+				.join('');
+
+			// Update the pill button
+			document.getElementById('user-name').textContent   = name;
+			document.getElementById('userAvatar').textContent  = initials;
+
+			// Update the dropdown info
+			document.getElementById('dropdown-user-name').textContent  = name;
+			document.getElementById('dropdown-user-email').textContent = email;
+			document.getElementById('dropdownAvatar').textContent      = initials;
+		});
+
+		function toggleUserMenu() {
+			const dropdown = document.getElementById('userDropdown');
+			const caret    = document.getElementById('userCaret');
+			const isOpen   = dropdown.classList.toggle('show');
+			caret.classList.toggle('open', isOpen);
+
+			// Close when clicking outside
+			if (isOpen) {
+				function outsideClick(e) {
+					if (!document.getElementById('userMenuContainer').contains(e.target)) {
+						dropdown.classList.remove('show');
+						caret.classList.remove('open');
+						document.removeEventListener('click', outsideClick);
+					}
+				}
+				setTimeout(() => document.addEventListener('click', outsideClick), 0);
+			}
+		}
+
+		function handleLogout(e) {
+			e.preventDefault();
+			// Clear stored login data
+			localStorage.removeItem('mm_user_name');
+			localStorage.removeItem('mm_user_email');
+			localStorage.removeItem('mm_logged_in');
+			// Redirect to login page
+			window.location.href = '/login';
+		}
+	</script>
+
+	<div class="main-content">
+		<div class="header-section">
+			<h1 class="title-animated">MentoraMind</h1>
+			<p class="subtitle">Your AI Learning Companion</p>
+		</div>
+
+		<div class="card-container">
+			<a href="/career_page" class="card card-career">
+				<div class="card-icon">🎯</div>
+				<h3>Career Recommendation</h3>
+				<p>Discover your ideal career path</p>
+			</a>
+
+			<a href="/study_page" class="card card-study">
+				<div class="card-icon">📚</div>
+				<h3>Study Environment</h3>
+				<p>Optimize your learning space</p>
+			</a>
+
+			<a href="/chatbot_page" class="card card-chatbot">
+				<div class="card-icon">💬</div>
+				<h3>AI Chatbot</h3>
+				<p>Get instant answers and guidance</p>
+			</a>
+		</div>
+	</div>
+
+	<script src="/static/js/script.js"></script>
+</body>
+</html>
