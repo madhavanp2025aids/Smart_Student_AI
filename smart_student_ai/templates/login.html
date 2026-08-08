@@ -5,31 +5,129 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Login - MentoraMind</title>
 	<link rel="stylesheet" href="/static/css/style.css">
-	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<style>
+		body {
+			background: #080c14 !important;
+			font-family: 'Outfit', sans-serif !important;
+			overflow-x: hidden;
+			color: #e2e8f0;
+		}
+
+		.background-animation {
+			background: radial-gradient(circle at 50% 50%, #0d1527 0%, #050811 100%) !important;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: -2;
+		}
+
+		/* Enhanced Vibrant Floating Blobs */
+		.shape {
+			filter: blur(110px) !important;
+			opacity: 0.55;
+			transition: all 1s ease;
+		}
+
+		.shape-1 {
+			width: 380px;
+			height: 380px;
+			background: radial-gradient(circle, rgba(99, 102, 241, 0.45) 0%, rgba(99, 102, 241, 0) 70%) !important;
+			top: -80px;
+			left: -80px;
+			animation: floatDiagonal 18s ease-in-out infinite;
+		}
+
+		.shape-2 {
+			width: 420px;
+			height: 420px;
+			background: radial-gradient(circle, rgba(217, 70, 239, 0.35) 0%, rgba(217, 70, 239, 0) 70%) !important;
+			top: 35%;
+			right: -120px;
+			animation: floatWave 20s ease-in-out infinite;
+			animation-delay: 2s;
+		}
+
+		.shape-3 {
+			width: 320px;
+			height: 320px;
+			background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, rgba(59, 130, 246, 0) 70%) !important;
+			bottom: -60px;
+			left: 15%;
+			animation: floatSpiral 22s ease-in-out infinite;
+			animation-delay: 4s;
+		}
+
+		.shape-4 {
+			width: 480px;
+			height: 480px;
+			background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, rgba(168, 85, 247, 0) 70%) !important;
+			bottom: -120px;
+			right: 12%;
+			animation: floatPulse 16s ease-in-out infinite;
+			animation-delay: 1s;
+		}
+
 		.login-container {
 			display: flex;
 			justify-content: center;
 			align-items: center;
 			min-height: 100vh;
-			padding: 20px;
+			padding: 40px 20px;
+			position: relative;
+			z-index: 1;
 		}
 
+		/* Dark Futuristic Glassmorphism Card */
 		.login-card {
-			background: rgba(255, 255, 255, 0.95);
-			border-radius: 20px;
-			padding: 50px 40px;
-			max-width: 450px;
+			background: rgba(15, 23, 42, 0.55);
+			backdrop-filter: blur(25px);
+			-webkit-backdrop-filter: blur(25px);
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			border-radius: 28px;
+			padding: 55px 45px;
+			max-width: 460px;
 			width: 100%;
-			box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-			animation: slideIn 0.6s ease-out;
+			box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6),
+			            0 0 50px rgba(99, 102, 241, 0.15);
+			animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+			position: relative;
+			overflow: hidden;
+			transition: border-color 0.5s ease, box-shadow 0.5s ease, transform 0.3s ease;
+		}
+
+		.login-card:hover {
+			border-color: rgba(255, 255, 255, 0.14);
+			box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.7),
+			            0 0 60px rgba(217, 70, 239, 0.22);
+			transform: translateY(-2px);
+		}
+
+		/* Glowing card top indicator */
+		.login-card::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 4px;
+			background: linear-gradient(90deg, #6366f1, #d946ef, #3b82f6);
+			background-size: 200% auto;
+			animation: flowGradient 4s linear infinite;
+		}
+
+		@keyframes flowGradient {
+			0% { background-position: 0% 50%; }
+			100% { background-position: 200% 50%; }
 		}
 
 		@keyframes slideIn {
 			from {
 				opacity: 0;
-				transform: translateY(-20px);
+				transform: translateY(30px);
 			}
 			to {
 				opacity: 1;
@@ -39,130 +137,262 @@
 
 		.login-header {
 			text-align: center;
-			margin-bottom: 40px;
+			margin-bottom: 35px;
+		}
+
+		/* Spinning Glowing Gradient Logo Ring */
+		.icon-circle {
+			width: 76px;
+			height: 76px;
+			background: rgba(15, 23, 42, 0.6);
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 38px;
+			margin: 0 auto 22px;
+			position: relative;
+			z-index: 1;
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+		}
+
+		.icon-circle::before {
+			content: '';
+			position: absolute;
+			inset: -3px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, #6366f1, #d946ef, #3b82f6);
+			z-index: -1;
+			animation: rotateLogoRing 6s linear infinite;
+		}
+
+		@keyframes rotateLogoRing {
+			100% { transform: rotate(360deg); }
 		}
 
 		.login-header h1 {
-			font-size: 32px;
-			color: #6366f1;
+			font-size: 34px;
+			font-weight: 800;
 			margin: 0;
-			font-weight: 700;
-			margin-bottom: 10px;
+			letter-spacing: -0.5px;
+			margin-bottom: 8px;
+			background: linear-gradient(135deg, #ffffff 40%, #c7d2fe 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			font-family: 'Montserrat', sans-serif;
 		}
 
 		.login-header p {
-			color: #666;
-			font-size: 14px;
+			color: #94a3b8;
+			font-size: 14.5px;
 			margin: 0;
+			font-weight: 500;
+			letter-spacing: 0.2px;
+			transition: all 0.3s ease;
 		}
 
 		.form-group {
-			margin-bottom: 20px;
+			margin-bottom: 24px;
+			position: relative;
 		}
 
 		.form-group label {
-			display: block;
-			margin-bottom: 8px;
-			color: #333;
-			font-weight: 500;
-			font-size: 14px;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			margin-bottom: 9px;
+			color: #cbd5e1;
+			font-weight: 600;
+			font-size: 12.5px;
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
 		}
 
 		.form-group input {
 			width: 100%;
-			padding: 12px 15px;
-			border: 2px solid #e0e0e0;
-			border-radius: 10px;
-			font-size: 14px;
-			font-family: 'Roboto', sans-serif;
-			transition: all 0.3s ease;
+			padding: 14px 18px;
+			background: rgba(15, 23, 42, 0.6);
+			border: 1.5px solid rgba(255, 255, 255, 0.08);
+			border-radius: 12px;
+			font-size: 15px;
+			color: #ffffff;
+			font-family: 'Outfit', sans-serif;
+			transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 			box-sizing: border-box;
+		}
+
+		.form-group input::placeholder {
+			color: #64748b;
 		}
 
 		.form-group input:focus {
 			outline: none;
 			border-color: #6366f1;
-			box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+			background: rgba(15, 23, 42, 0.85);
+			box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2),
+			            inset 0 2px 4px rgba(0, 0, 0, 0.25);
 		}
 
-		.form-group input::placeholder {
-			color: #999;
+		/* Interactive Password Visibility Toggle */
+		.password-input-wrapper {
+			position: relative;
+			width: 100%;
 		}
 
+		.password-input-wrapper input {
+			padding-right: 48px;
+		}
+
+		.password-toggle-btn {
+			position: absolute;
+			right: 16px;
+			top: 50%;
+			transform: translateY(-50%);
+			background: none;
+			border: none;
+			color: #64748b;
+			cursor: pointer;
+			padding: 4px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 16px;
+			transition: color 0.3s ease, transform 0.2s ease;
+		}
+
+		.password-toggle-btn:hover {
+			color: #a5b4fc;
+			transform: translateY(-50%) scale(1.1);
+		}
+
+		/* Vibrant Alert Styling */
 		.error-message {
-			background: #fee;
-			color: #c33;
-			padding: 12px 15px;
-			border-radius: 10px;
-			margin-bottom: 20px;
+			background: rgba(239, 68, 68, 0.12);
+			border: 1px solid rgba(239, 68, 68, 0.25);
+			color: #f87171;
+			padding: 14px 18px;
+			border-radius: 12px;
+			margin-bottom: 24px;
 			font-size: 14px;
-			border-left: 4px solid #c33;
-			animation: shake 0.5s ease;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
 		}
 
 		@keyframes shake {
-			0%, 100% { transform: translateX(0); }
-			25% { transform: translateX(-5px); }
-			75% { transform: translateX(5px); }
+			10%, 90% { transform: translate3d(-1px, 0, 0); }
+			20%, 80% { transform: translate3d(2px, 0, 0); }
+			30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+			40%, 60% { transform: translate3d(4px, 0, 0); }
 		}
 
-		.success-message {
-			background: #efe;
-			color: #3c3;
-			padding: 12px 15px;
-			border-radius: 10px;
-			margin-bottom: 20px;
-			font-size: 14px;
-			border-left: 4px solid #3c3;
+		/* Glassy Demo Notice */
+		.demo-notice {
+			background: rgba(59, 130, 246, 0.08);
+			border: 1px solid rgba(59, 130, 246, 0.18);
+			padding: 18px;
+			border-radius: 16px;
+			margin-bottom: 25px;
+			font-size: 13.5px;
+			color: #93c5fd;
+			text-align: left;
+			box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 		}
 
+		.demo-notice strong {
+			display: block;
+			margin-bottom: 6px;
+			color: #bfdbfe;
+			font-weight: 600;
+		}
+
+		.demo-notice code {
+			background: rgba(0, 0, 0, 0.25);
+			padding: 2.5px 6.5px;
+			border-radius: 6px;
+			color: #60a5fa;
+			font-family: monospace;
+			font-size: 12px;
+			border: 1px solid rgba(255, 255, 255, 0.03);
+		}
+
+		/* Submit Button styling */
 		.btn-submit {
 			width: 100%;
-			padding: 12px;
-			background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+			padding: 15px;
+			background: linear-gradient(135deg, #6366f1 0%, #d946ef 50%, #2563eb 100%);
+			background-size: 200% auto;
 			color: white;
 			border: none;
-			border-radius: 10px;
-			font-size: 15px;
-			font-weight: 600;
+			border-radius: 12px;
+			font-size: 15.5px;
+			font-weight: 700;
 			cursor: pointer;
-			transition: all 0.3s ease;
-			margin-bottom: 15px;
+			transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+			margin-top: 8px;
+			margin-bottom: 16px;
+			box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
 		}
 
 		.btn-submit:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+			background-position: right center;
+			transform: translateY(-2px) scale(1.01);
+			box-shadow: 0 8px 25px rgba(217, 70, 239, 0.35);
 		}
 
 		.btn-submit:active {
-			transform: translateY(0);
+			transform: translateY(0) scale(0.99);
 		}
 
 		.toggle-section {
 			text-align: center;
-			margin-top: 20px;
+			margin-top: 22px;
 		}
 
 		.toggle-text {
-			color: #666;
+			color: #64748b;
 			font-size: 14px;
 		}
 
 		.toggle-btn {
 			background: none;
 			border: none;
-			color: #6366f1;
+			color: #60a5fa;
 			cursor: pointer;
-			font-weight: 600;
-			text-decoration: underline;
+			font-weight: 700;
 			font-size: 14px;
 			padding: 0;
 			margin-left: 5px;
+			transition: all 0.3s ease;
+			position: relative;
+		}
+
+		.toggle-btn::after {
+			content: '';
+			position: absolute;
+			width: 100%;
+			transform: scaleX(0);
+			height: 1.5px;
+			bottom: -2px;
+			left: 0;
+			background-color: #a78bfa;
+			transform-origin: bottom right;
+			transition: transform 0.25s ease-out;
 		}
 
 		.toggle-btn:hover {
-			color: #8b5cf6;
+			color: #a78bfa;
+			text-shadow: 0 0 10px rgba(167, 139, 250, 0.4);
+		}
+
+		.toggle-btn:hover::after {
+			transform: scaleX(1);
+			transform-origin: bottom left;
 		}
 
 		.form-section {
@@ -171,83 +401,61 @@
 
 		.form-section.active {
 			display: block;
-			animation: fadeIn 0.3s ease;
+			animation: sectionFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 		}
 
-		@keyframes fadeIn {
+		@keyframes sectionFadeIn {
 			from {
 				opacity: 0;
+				transform: scale(0.97);
 			}
 			to {
 				opacity: 1;
+				transform: scale(1);
 			}
 		}
 
-		.demo-notice {
-			background: #f0f7ff;
-			border-left: 4px solid #2563eb;
-			padding: 15px;
-			border-radius: 8px;
-			margin-bottom: 20px;
-			font-size: 13px;
-			color: #1e40af;
-		}
-
-		.demo-notice strong {
-			display: block;
-			margin-bottom: 5px;
-		}
-
-		.icon-circle {
-			width: 60px;
-			height: 60px;
-			background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-			border-radius: 50%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 30px;
-			margin: 0 auto 20px;
-		}
-
+		/* Password strength bar */
 		.password-strength {
-			margin-top: 8px;
-			height: 4px;
-			background: #e0e0e0;
-			border-radius: 2px;
+			margin-top: 10px;
+			height: 5px;
+			background: rgba(255, 255, 255, 0.08);
+			border-radius: 10px;
 			overflow: hidden;
 		}
 
 		.password-strength-bar {
 			height: 100%;
 			width: 0%;
-			background: #ddd;
-			border-radius: 2px;
-			transition: all 0.3s ease;
+			background: transparent;
+			transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 		}
 
 		.password-strength-bar.weak {
 			width: 33%;
-			background: #ef4444;
+			background: linear-gradient(90deg, #ef4444, #f87171);
+			box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
 		}
 
 		.password-strength-bar.medium {
 			width: 66%;
-			background: #f59e0b;
+			background: linear-gradient(90deg, #f59e0b, #fbbf24);
+			box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
 		}
 
 		.password-strength-bar.strong {
 			width: 100%;
-			background: #10b981;
+			background: linear-gradient(90deg, #10b981, #34d399);
+			box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
 		}
 
-		@media (max-width: 600px) {
+		@media (max-width: 480px) {
 			.login-card {
-				padding: 30px 20px;
+				padding: 40px 25px;
 			}
 
 			.login-header h1 {
-				font-size: 26px;
+				font-size: 28px;
 			}
 		}
 	</style>
@@ -279,21 +487,29 @@
 
 			<!-- Login/Register Form -->
 			<form id="authForm" method="POST" action="/login">
-				<!-- Error Message (if any) -->
+				<!-- Error Message -->
 				{% if error %}
-					<div class="error-message">{{ error }}</div>
+					<div class="error-message">
+						<i class="fas fa-exclamation-triangle"></i>
+						<span>{{ error }}</span>
+					</div>
 				{% endif %}
 
 				<!-- Login Section -->
 				<div class="form-section login-section active">
 					<div class="form-group">
-						<label for="login-email">📧 Email</label>
-						<input type="email" id="login-email" name="email" placeholder="your.email@example.com" required>
+						<label for="login-email"><i class="far fa-envelope"></i> Email Address</label>
+						<input type="email" id="login-email" name="email" placeholder="name@example.com" required>
 					</div>
 
 					<div class="form-group">
-						<label for="login-password">🔐 Password</label>
-						<input type="password" id="login-password" name="password" placeholder="Enter your password" required>
+						<label for="login-password"><i class="fas fa-lock"></i> Password</label>
+						<div class="password-input-wrapper">
+							<input type="password" id="login-password" name="password" placeholder="Enter your password" required>
+							<button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('login-password', this)">
+								<i class="far fa-eye"></i>
+							</button>
+						</div>
 					</div>
 
 					<button type="submit" class="btn-submit">
@@ -301,21 +517,26 @@
 					</button>
 
 					<div class="toggle-section">
-						<span class="toggle-text">Don't have an account?</span>
-						<button type="button" class="toggle-btn" onclick="toggleForm(event)">Register</button>
+						<span class="toggle-text">New to MentoraMind?</span>
+						<button type="button" class="toggle-btn" onclick="toggleForm(event)">Create account</button>
 					</div>
 				</div>
 
 				<!-- Register Section -->
 				<div class="form-section register-section">
 					<div class="form-group">
-						<label for="register-email">📧 Email</label>
-						<input type="email" id="register-email" name="email" placeholder="your.email@example.com">
+						<label for="register-email"><i class="far fa-envelope"></i> Email Address</label>
+						<input type="email" id="register-email" name="email" placeholder="name@example.com">
 					</div>
 
 					<div class="form-group">
-						<label for="register-password">🔐 Password</label>
-						<input type="password" id="register-password" name="password" placeholder="At least 6 characters" onkeyup="checkPasswordStrength(this.value)">
+						<label for="register-password"><i class="fas fa-lock"></i> Create Password</label>
+						<div class="password-input-wrapper">
+							<input type="password" id="register-password" name="password" placeholder="Min. 6 characters" onkeyup="checkPasswordStrength(this.value)">
+							<button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('register-password', this)">
+								<i class="far fa-eye"></i>
+							</button>
+						</div>
 						<div class="password-strength">
 							<div class="password-strength-bar" id="strength-bar"></div>
 						</div>
@@ -324,12 +545,12 @@
 					<input type="hidden" name="is_register" value="true">
 
 					<button type="submit" class="btn-submit">
-						<i class="fas fa-user-plus"></i> Create Account
+						<i class="fas fa-user-plus"></i> Register
 					</button>
 
 					<div class="toggle-section">
 						<span class="toggle-text">Already have an account?</span>
-						<button type="button" class="toggle-btn" onclick="toggleForm(event)">Login</button>
+						<button type="button" class="toggle-btn" onclick="toggleForm(event)">Login here</button>
 					</div>
 				</div>
 			</form>
@@ -337,6 +558,21 @@
 	</div>
 
 	<script>
+		function togglePasswordVisibility(inputId, toggleBtn) {
+			const passwordInput = document.getElementById(inputId);
+			const icon = toggleBtn.querySelector('i');
+			
+			if (passwordInput.type === 'password') {
+				passwordInput.type = 'text';
+				icon.classList.remove('fa-eye');
+				icon.classList.add('fa-eye-slash');
+			} else {
+				passwordInput.type = 'password';
+				icon.classList.remove('fa-eye-slash');
+				icon.classList.add('fa-eye');
+			}
+		}
+
 		function toggleForm(event) {
 			event.preventDefault();
 			
@@ -360,6 +596,16 @@
 				loginPass.removeAttribute('required');
 				registerEmail.setAttribute('required', '');
 				registerPass.setAttribute('required', '');
+				
+				// Reset password visibility icons to normal eye
+				document.querySelectorAll('.password-toggle-btn i').forEach(icon => {
+					icon.className = 'far fa-eye';
+				});
+				document.querySelectorAll('.password-input-wrapper input').forEach(input => {
+					input.type = 'password';
+				});
+				
+				document.getElementById('strength-bar').className = 'password-strength-bar';
 			} else {
 				headerSubtitle.textContent = 'Welcome Back!';
 				document.getElementById('authForm').reset();
@@ -367,6 +613,14 @@
 				loginPass.setAttribute('required', '');
 				registerEmail.removeAttribute('required');
 				registerPass.removeAttribute('required');
+				
+				// Reset password visibility icons to normal eye
+				document.querySelectorAll('.password-toggle-btn i').forEach(icon => {
+					icon.className = 'far fa-eye';
+				});
+				document.querySelectorAll('.password-input-wrapper input').forEach(input => {
+					input.type = 'password';
+				});
 			}
 		}
 
@@ -445,7 +699,6 @@
 					return;
 				}
 			}
-			// If validation passes, form will submit normally
 		});
 	</script>
 </body>
